@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WaterSense AI - SVD & Quantum Watermarking with AI Detection</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #6A0DAD 0%, #2F1A67 100%);
+        }
+        .water-ripple {
+            position: relative;
+            overflow: hidden;
+        }
+        .water-ripple::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+        .water-ripple:hover::after {
+            animation: ripple 1s ease-out;
+        }
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(20, 20);
+                opacity: 0;
+            }
+        }
+        .quantum-animation {
+            animation: pulse 4s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(103, 58, 183, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(103, 58, 183, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(103, 58, 183, 0); }
+        }
+        .result-box {
+            background: rgba(31, 41, 55, 0.8);
+            border: 1px solid #4b5563;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+        .processing {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 2s linear infinite;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<body class="bg-gray-900 text-white min-h-screen">
+    <nav class="gradient-bg p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-fingerprint text-2xl"></i>
+                <span class="text-xl font-bold">WaterSense AI</span>
+            </div>
+            <div class="hidden md:flex space-x-4">
+                <a href="index.html" class="hover:text-purple-200 transition">Beranda</a>
+                <a href="detection.html" class="hover:text-purple-200 transition">Watermark Detection</a>
+                <a href="tentang.html" class="hover:text-purple-200 transition">Tentang</a>
+                <a href="dokumentasi.html" class="hover:text-purple-200 transition">Dokumentasi</a>
+            </div>            
+            <button class="md:hidden" id="mobile-menu-button">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden container mx-auto mt-2 pb-2">
+            <a href="#" class="block py-2 hover:text-purple-200 transition">Beranda</a>
+            <a href="#" class="block py-2 hover:text-purple-200 transition">Watermark Detection</a>
+            <a href="#" class="block py-2 hover:text-purple-200 transition">Tentang</a>
+            <a href="#" class="block py-2 hover:text-purple-200 transition">Dokumentasi</a>
+        </div>
+    </nav>
+
+    <header class="py-16 gradient-bg">
+        <div class="container mx-auto text-center px-4">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">SVD & Quantum Watermarking with AI Detection</h1>
+            <p class="text-xl mb-8">Proteksi Citra dari Manipulasi AI menggunakan Singular Value Decomposition (SVD) dan Quantum-inspired Watermarking</p>
+            <div class="quantum-animation inline-block p-1 rounded-full gradient-bg mb-6">
+                <div class="rounded-full w-64 h-64 bg-gray-700 flex items-center justify-center overflow-hidden">
+                    <img src="/static/images/WATERSENSE.png" alt="Foto Sherly" class="w-64 rounded-lg shadow" />
+                </div>
+            </div>
+        </div>
+    </header>    
+
+    <main class="container mx-auto py-12 px-4">
+        <!-- Canvas tersembunyi untuk pemrosesan gambar -->
+        <canvas id="processing-canvas" style="display: none;"></canvas>
+        
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-center">Proteksi & Deteksi Gambar</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <script type="module">
+                    // ---------- Backend Integration ----------
+                    const API_BASE_URL = 'http://localhost:3000/api';
+            
+                    class WatermarkingAPI {
+                        static async embedWatermark(imageData, method, strength) {
+                            const response = await fetch(`${API_BASE_URL}/watermark`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    image: imageData,
+                                    method: method,
+                                    strength: strength
+                                })
+                            });
+                            return await response.json();
+                        }
+                    }
+            
+                    class AIDetectionAPI {
+                        static async detectManipulation(imageData) {
+                            const response = await fetch(`${API_BASE_URL}/detect`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ image: imageData })
+                            });
+                            return await response.json();
+                        }
+                    }
+            
+                    // ---------- TensorFlow Operations ----------
+                    class ImageProcessor {
+                        static async convertToTensor(img) {
+                            return tf.tidy(() => {
+                                const tensor = tf.browser.fromPixels(img)
+                                    .resizeNearestNeighbor([224, 224])
+                                    .toFloat()
+                                    .div(255.0)
+                                    .expandDims();
+                                return tensor;
+                            });
+                        }
+            
+                        static calculateDifference(original, watermarked) {
+                            return tf.tidy(() => {
+                                const diff = tf.abs(original.sub(watermarked));
+                                return tf.mul(diff, 10.0); // Amplify difference
+                            });
+                        }
+                    }
+            
+                    // ---------- Quantum Implementation ----------
+                    class QuantumWatermark {
+                        constructor() {
+                            this.circuit = new QuantumCircuit(1024);
+                            this.circuit.applyEntanglement();
+                        }
+            
+                        generatePattern(strength) {
+                            const pattern = new Float32Array(1024);
+                            for(let i=0; i<1024; i++) {
+                                pattern[i] = this.circuit.measure(i) * strength;
+                            }
+                            return pattern;
+                        }
+                    }
+            
+                    class QuantumCircuit {
+                        // Implementasi sama seperti di jawaban sebelumnya
+                    }
+            
+                    // ---------- Main Application ----------
+                    document.addEventListener('DOMContentLoaded', async () => {
+                        // Inisialisasi model AI
+                        const detectionModel = await tf.loadLayersModel('/models/watermark-detection/model.json');
+                        
+                        // Event handlers sama seperti sebelumnya
+                        // Modifikasi fungsi watermarkGenerate:
+                        document.getElementById('watermark-generate').addEventListener('click', async function() {
+                            // ... kode upload gambar sebelumnya ...
+                            
+                            // Konversi ke tensor
+                            const tensor = await ImageProcessor.convertToTensor(img);
+                            
+                            // Proses watermarking
+                            const result = await WatermarkingAPI.embedWatermark(
+                                canvas.toDataURL().split(',')[1],
+                                document.getElementById('watermark-method').value,
+                                strength
+                            );
+                            
+                            // Proses hasil
+                            const watermarkedImg = new Image();
+                            watermarkedImg.src = `data:image/png;base64,${result.watermarked}`;
+
+                            
+                            // Hitung perbedaan
+                            const originalTensor = await ImageProcessor.convertToTensor(img);
+                            const watermarkedTensor = await ImageProcessor.convertToTensor(watermarkedImg);
+                            const diffTensor = ImageProcessor.calculateDifference(originalTensor, watermarkedTensor);
+                            
+                            // Update tampilan
+                            const diffCanvas = document.createElement('canvas');
+                            tf.browser.toPixels(diffTensor, diffCanvas);
+                            
+                            // Update UI dengan hasil
+                            document.getElementById('result-watermarked').src = watermarkedImg.src;
+                            document.getElementById('result-visualization').src = diffCanvas.toDataURL();
+                            
+                            // Update metrik
+                            updateMetrics(result.metrics);
+                            
+                        });
+                        
+            
+                        // Modifikasi fungsi detectionAnalyze:
+                        document.getElementById('detection-analyze').addEventListener('click', async function() {
+                            // ... kode upload gambar sebelumnya ...
+                            
+                            // Deteksi manipulasi
+                            const result = await AIDetectionAPI.detectManipulation(
+                                canvas.toDataURL().split(',')[1]
+                            );
+                            
+                            // Prediksi dengan model lokal
+                            const tensor = await ImageProcessor.convertToTensor(img);
+                            const localPrediction = detectionModel.predict(tensor);
+                            
+                            // Gabungkan hasil
+                            const finalResult = {
+                                ...result,
+                                localPrediction: Array.from(localPrediction.dataSync())
+                            };
+                            
+                            // Update UI
+                            updateDetectionResults(finalResult);
+                        });
+            
+                        // Fungsi bantuan
+                        async function updateMetrics(metrics) {
+                            // Implementasi visualisasi metrik dengan Chart.js
+                            new Chart(document.getElementById('metrics-chart'), {
+                                type: 'radar',
+                                data: {
+                                    labels: ['PSNR', 'SSIM', 'Kekuatan', 'Ketahanan'],
+                                    datasets: [{
+                                        data: [metrics.psnr, metrics.ssim, metrics.strength, metrics.resistance]
+                                    }]
+                                }
+                            });
+                        }
+            
+                        function updateDetectionResults(result) {
+                            // Implementasi update deteksi AI
+                            document.getElementById('ai-confidence').textContent = 
+                                `${result.confidence.toFixed(2)}% (${result.localPrediction[1].toFixed(2)}%)`;
+                            document.getElementById('ai-features').innerHTML = `
+                                <li>Intensitas Edge: ${result.features.edgeIntensity.toFixed(2)}</li>
+                                <li>Koherensi Quantum: ${result.features.quantumFeatures.phaseCoherence.toFixed(2)}</li>
+                            `;
+                        }
+                    });
+                </script>
+                <!-- Watermarking Section -->
+                <div class="p-6 bg-gray-800 rounded-xl shadow-xl water-ripple">
+                    <h3 class="text-2xl font-bold mb-4 flex items-center">
+                        <i class="fas fa-shield-alt mr-2 text-purple-400"></i>
+                        Sisipkan Watermark
+                    </h3>
+                    <p class="mb-6">Proteksi gambar Anda dengan teknik SVD dan Quantum-inspired Watermarking</p>
+                    
+                    <form id="watermark-form">
+                        <div class="mb-4">
+                            <div id="watermark-dropzone" class="flex items-center justify-center border-2 border-dashed border-purple-500 rounded-lg p-8 mb-4 cursor-pointer hover:border-purple-400 transition">
+                                <div class="text-center">
+                                    <i class="fas fa-cloud-upload-alt text-5xl mb-3 text-purple-400"></i>
+                                    <p>Seret gambar ke sini atau</p>
+                                    <input type="file" id="watermark-input" accept="image/*" class="hidden">
+                                    <button type="button" id="watermark-browse" class="mt-2 px-4 py-2 bg-purple-600 rounded-lg hover:bg-purple-700 transition">
+                                        Pilih File
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="watermark-preview" class="hidden mb-4">
+                                <img id="watermark-image-preview" class="w-full max-h-64 object-contain rounded-lg" src="" alt="Preview">
+                                <button type="button" id="watermark-remove" class="mt-2 text-sm text-red-400 hover:text-red-300">Hapus Gambar</button>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 mb-6">
+                            <div>
+                                <label class="block mb-2 text-sm">Kekuatan Watermark</label>
+                                <input type="range" id="watermark-strength" class="w-full" min="1" max="10" value="5">
+                                <div class="flex justify-between text-xs mt-1">
+                                    <span>Rendah</span>
+                                    <span id="strength-value">5</span>
+                                    <span>Tinggi</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block mb-2 text-sm">Metode Watermark</label>
+                                <select id="watermark-method" class="w-full bg-gray-700 p-2 rounded">
+                                    <option value="svd">SVD Only</option>
+                                    <option value="quantum" selected>Quantum-inspired</option>
+                                    <option value="hybrid">Hybrid (SVD+Quantum)</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <button type="button" id="watermark-generate" class="w-full py-3 gradient-bg rounded-lg font-bold hover:opacity-90 transition flex items-center justify-center" disabled>
+                            <i class="fas fa-magic mr-2"></i>
+                            Generate Watermark
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- Detection Section -->
+                <div class="p-6 bg-gray-800 rounded-xl shadow-xl water-ripple">
+                    <h3 class="text-2xl font-bold mb-4 flex items-center">
+                        <i class="fas fa-search mr-2 text-blue-400"></i>
+                        Deteksi Manipulasi AI
+                    </h3>
+                    <p class="mb-6">Periksa apakah gambar telah dimanipulasi dengan AI</p>
+                    
+                    <form id="detection-form">
+                        <div class="mb-4">
+                            <div id="detection-dropzone" class="flex items-center justify-center border-2 border-dashed border-blue-500 rounded-lg p-8 mb-4 cursor-pointer hover:border-blue-400 transition">
+                                <div class="text-center">
+                                    <i class="fas fa-cloud-upload-alt text-5xl mb-3 text-blue-400"></i>
+                                    <p>Seret gambar ke sini atau</p>
+                                    <input type="file" id="detection-input" accept="image/*" class="hidden">
+                                    <button type="button" id="detection-browse" class="mt-2 px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-700 transition">
+                                        Pilih File
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="detection-preview" class="hidden mb-4">
+                                <img id="detection-image-preview" class="w-full max-h-64 object-contain rounded-lg" src="" alt="Preview">
+                                <button type="button" id="detection-remove" class="mt-2 text-sm text-red-400 hover:text-red-300">Hapus Gambar</button>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block mb-2 text-sm">Model Deteksi</label>
+                            <select id="detection-model" class="w-full bg-gray-700 p-2 rounded">
+                                <option value="cnn">CNN Classifier</option>
+                                <option value="resnet" selected>ResNet50</option>
+                                <option value="efficientnet">EfficientNet</option>
+                            </select>
+                        </div>
+                        
+                        <button type="button" id="detection-analyze" class="w-full py-3 bg-gradient-to-r from-blue-600 to-blue-800 rounded-lg font-bold hover:opacity-90 transition flex items-center justify-center" disabled>
+                            <i class="fas fa-microscope mr-2"></i>
+                            Analisis Forensik
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+        
+       <!-- Results Section -->
+<section class="mb-16">
+    <h2 class="text-3xl font-bold mb-8 text-center">Hasil Analisis</h2>
+
+    <!-- Container dibungkus dengan analysis-result -->
+    <div id="result-container" class="result-box p-6 hidden">
+        <div id="analysis-result"> <!-- ⬅️ Tambahkan pembungkus ini -->
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="flex flex-col items-center">
+                    <h4 class="text-lg font-bold mb-3">Gambar Asli</h4>
+                    <div class="bg-gray-800 w-full h-64 rounded-lg flex items-center justify-center">
+                        <img id="result-original" src="" alt="Gambar Asli" class="max-h-full max-w-full rounded">
+                    </div>
+                </div>
+
+                <div class="flex flex-col items-center">
+                    <h4 class="text-lg font-bold mb-3">Hasil Watermark</h4>
+                    <div class="bg-gray-800 w-full h-64 rounded-lg flex items-center justify-center">
+                        <img id="result-watermarked" src="" alt="Gambar dengan Watermark" class="max-h-full max-w-full rounded">
+                    </div>
+                </div>
+
+                <div class="flex flex-col items-center">
+                    <h4 class="text-lg font-bold mb-3">Perbedaan/Noise</h4>
+                    <div class="bg-gray-800 w-full h-64 rounded-lg flex items-center justify-center">
+                        <img id="result-visualization" src="" alt="Visualisasi Watermark" class="max-h-full max-w-full rounded">
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 grid md:grid-cols-2 gap-8">
+                <div class="bg-gray-800 p-6 rounded-lg">
+                    <h4 class="text-lg font-bold mb-4">Analisis Forensik</h4>
+                    <div class="mb-4">
+                        <div class="flex justify-between mb-1">
+                            <span>Keaslian Gambar</span>
+                            <span id="integrity-score" class="text-green-400">--</span>
+                        </div>
+                        <div class="w-full bg-gray-700 rounded-full h-2">
+                            <div id="integrity-bar" class="bg-green-400 h-2 rounded-full transition-all duration-1000" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <div class="flex justify-between mb-1">
+                            <span>Kekuatan Watermark</span>
+                            <span id="strength-score" class="text-blue-400">--</span>
+                        </div>
+                        <div class="w-full bg-gray-700 rounded-full h-2">
+                            <div id="strength-bar" class="bg-blue-400 h-2 rounded-full transition-all duration-1000" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <div class="flex justify-between mb-1">
+                            <span>Ketahanan Manipulasi</span>
+                            <span id="resistance-score" class="text-purple-400">--</span>
+                        </div>
+                        <div class="w-full bg-gray-700 rounded-full h-2">
+                            <div id="resistance-bar" class="bg-purple-400 h-2 rounded-full transition-all duration-1000" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gray-800 p-6 rounded-lg">
+                    <h4 class="text-lg font-bold mb-4">Hasil Deteksi AI</h4>
+
+                    <div id="detection-watermark" class="flex items-center mb-4">
+                        <img src="path/to/icon.svg" alt="" class="h-5 w-5 mr-2 text-gray-400">
+                        <span>Status Watermark: Belum Dianalisis</span>
+                    </div>
+                    <div id="detection-manipulation" class="flex items-center mb-4">
+                        <img src="path/to/icon.svg" alt="" class="h-5 w-5 mr-2 text-gray-400">
+                        <span>Status Manipulasi: Belum Dianalisis</span>
+                    </div>
+                    <div id="detection-integrity" class="flex items-center mb-4">
+                        <img src="path/to/icon.svg" alt="" class="h-5 w-5 mr-2 text-gray-400">
+                        <span>Integritas: Belum Dianalisis</span>
+                    </div>
+
+                    <div class="mt-4 p-3 bg-gray-700 rounded-lg text-sm">
+                        <p><span class="font-bold">Confidence Score:</span> <span id="confidence-score">--</span></p>
+                        <p><span class="font-bold">Model Used:</span> <span id="model-used">--</span></p>
+                        <p><span class="font-bold">Processing Time:</span> <span id="processing-time">--</span></p>
+                    </div>
+
+                    <!-- Tombol Download -->
+                    <div class="mt-4">
+                        <button onclick="downloadAnalysisAsImage()" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition-all">
+                            Download Hasil Analisis (PNG)
+                        </button>
+                        <button onclick="downloadWatermarkedImageOnly()" class="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg transition-all mt-2">
+                            Download Gambar Watermark Saja
+                        </button>
+                    </div>
+                    
+                </div>
+            </div>
+
+        </div> <!-- ⬅️ Penutup untuk #analysis-result -->
+
+        <div id="no-results" class="p-8 text-center text-gray-400">
+            <i class="fas fa-image text-5xl mb-4"></i>
+            <p>Upload gambar dan gunakan tool di atas untuk melihat hasil analisis</p>
+        </div>
+    </div>
+</section>
+
+<!-- Tambahkan html2canvas dan fungsi JS di akhir sebelum </body> -->
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+    function downloadAnalysisAsImage() {
+        const element = document.getElementById("analysis-result");
+
+        html2canvas(element).then(canvas => {
+            const link = document.createElement("a");
+            link.download = "hasil-analisis.png";
+            link.href = canvas.toDataURL("image/png");
+            link.click();
+        });
+    }
+</script>
+
+                    
+            <div id="no-results" class="p-8 text-center text-gray-400">
+                <i class="fas fa-image text-5xl mb-4"></i>
+                <p>Upload gambar dan gunakan tool di atas untuk melihat hasil analisis</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="gradient-bg py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-fingerprint text-2xl"></i>
+                        <span class="text-xl font-bold">WaterSense AI</span>
+                    </div>
+                    <p class="text-sm mt-1">© 2023 WaterSense AI. All rights reserved.</p>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="#" class="hover:text-purple-200 transition"><i class="fab fa-github text-xl"></i></a>
+                    <a href="#" class="hover:text-purple-200 transition"><i class="fab fa-twitter text-xl"></i></a>
+                    <a href="#" class="hover:text-purple-200 transition"><i class="fab fa-linkedin text-xl"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // SVD Implementation
+        class SVDWatermarking {
+            static svd(matrix) {
+                // Simplified SVD implementation using power iteration
+                const m = matrix.length;
+                const n = matrix[0].length;
+                const minDim = Math.min(m, n);
+                
+                // Create covariance matrix
+                const AT = this.transpose(matrix);
+                const ATA = this.multiply(AT, matrix);
+                
+                // Find eigenvalues and eigenvectors using power iteration
+                const { eigenvalues, eigenvectors } = this.powerIteration(ATA, Math.min(minDim, 10));
+                
+                return {
+                    U: eigenvectors,
+                    S: eigenvalues,
+                    V: eigenvectors
+                };
+            }
+            
+            static transpose(matrix) {
+                const rows = matrix.length;
+                const cols = matrix[0].length;
+                const result = [];
+                
+                for (let i = 0; i < cols; i++) {
+                    result[i] = [];
+                    for (let j = 0; j < rows; j++) {
+                        result[i][j] = matrix[j][i];
+                    }
+                }
+                return result;
+            }
+            
+            static multiply(A, B) {
+                const rowsA = A.length;
+                const colsA = A[0].length;
+                const colsB = B[0].length;
+                const result = [];
+                
+                for (let i = 0; i < rowsA; i++) {
+                    result[i] = [];
+                    for (let j = 0; j < colsB; j++) {
+                        result[i][j] = 0;
+                        for (let k = 0; k < colsA; k++) {
+                            result[i][j] += A[i][k] * B[k][j];
+                        }
+                    }
+                }
+                return result;
+            }
+            
+            static powerIteration(matrix, numComponents) {
+                const n = matrix.length;
+                const eigenvalues = [];
+                const eigenvectors = [];
+                
+                for (let comp = 0; comp < numComponents; comp++) {
+                    let v = new Array(n).fill(0).map(() => Math.random());
+                    
+                    // Normalize
+                    let norm = Math.sqrt(v.reduce((sum, val) => sum + val * val, 0));
+                    v = v.map(val => val / norm);
+                    
+                    // Power iteration
+                    for (let iter = 0; iter < 100; iter++) {
+                        const Av = matrix.map(row => 
+                            row.reduce((sum, val, idx) => sum + val * v[idx], 0)
+                        );
+                        
+                        norm = Math.sqrt(Av.reduce((sum, val) => sum + val * val, 0));
+                        v = Av.map(val => val / norm);
+                    }
+                    
+                    eigenvalues.push(norm);
+                    eigenvectors.push(v);
+                }
+                
+                return { eigenvalues, eigenvectors };
+            }
+            
+            static embedWatermark(imageData, watermark, strength = 0.1) {
+                const width = imageData.width;
+                const height = imageData.height;
+                const data = new Uint8ClampedArray(imageData.data);
+                
+                // Convert to matrix (grayscale)
+                const matrix = [];
+                for (let i = 0; i < height; i++) {
+                    matrix[i] = [];
+                    for (let j = 0; j < width; j++) {
+                        const index = (i * width + j) * 4;
+                        matrix[i][j] = (data[index] + data[index + 1] + data[index + 2]) / 3;
+                    }
+                }
+                
+                // Apply SVD
+                const { U, S, V } = this.svd(matrix);
+                
+                // Embed watermark in singular values
+                const watermarkSize = Math.min(watermark.length, S.length);
+                for (let i = 0; i < watermarkSize; i++) {
+                    S[i] += watermark[i] * strength * 50;
+                }
+                
+                // Reconstruct matrix
+                const reconstructed = this.reconstructFromSVD(U, S, V, height, width);
+                
+                // Convert back to image data
+                for (let i = 0; i < height; i++) {
+                    for (let j = 0; j < width; j++) {
+                        const index = (i * width + j) * 4;
+                        const value = Math.max(0, Math.min(255, reconstructed[i][j]));
+                        data[index] = value;     // R
+                        data[index + 1] = value; // G
+                        data[index + 2] = value; // B
+                        // Alpha channel remains unchanged
+                    }
+                }
+                
+                return new ImageData(data, width, height);
+            }
+            
+            static reconstructFromSVD(U, S, V, height, width) {
+                const result = [];
+                const components = Math.min(S.length, 5); // Use top 5 components
+                
+                for (let i = 0; i < height; i++) {
+                    result[i] = [];
+                    for (let j = 0; j < width; j++) {
+                        let value = 0;
+                        for (let k = 0; k < components && k < U.length; k++) {
+                            const uik = k < U[i].length ? U[i][k] : 0;
+                            const sk = k < S.length ? S[k] : 0;
+                            const vkj = k < V.length && j < V[k].length ? V[k][j] : 0;
+                            value += uik * sk * vkj;
+                        }
+                        result[i][j] = value;
+                    }
+                }
+                return result;
+            }
+        }
+
+        // Quantum-inspired Watermarking
+        class QuantumWatermarking {
+            static dct2D(matrix) {
+                const N = matrix.length;
+                const M = matrix[0].length;
+                const result = [];
+                
+                for (let u = 0; u < N; u++) {
+                    result[u] = [];
+                    for (let v = 0; v < M; v++) {
+                        let sum = 0;
+                        for (let x = 0; x < N; x++) {
+                            for (let y = 0; y < M; y++) {
+                                sum += matrix[x][y] * 
+                                       Math.cos(Math.PI * u * (2 * x + 1) / (2 * N)) *
+                                       Math.cos(Math.PI * v * (2 * y + 1) / (2 * M));
+                            }
+                        }
+                        const cu = u === 0 ? 1 / Math.sqrt(2) : 1;
+                        const cv = v === 0 ? 1 / Math.sqrt(2) : 1;
+                        result[u][v] = (2 / Math.sqrt(N * M)) * cu * cv * sum;
+                    }
+                }
+                return result;
+            }
+            
+            static idct2D(matrix) {
+                const N = matrix.length;
+                const M = matrix[0].length;
+                const result = [];
+                
+                for (let x = 0; x < N; x++) {
+                    result[x] = [];
+                    for (let y = 0; y < M; y++) {
+                        let sum = 0;
+                        for (let u = 0; u < N; u++) {
+                            for (let v = 0; v < M; v++) {
+                                const cu = u === 0 ? 1 / Math.sqrt(2) : 1;
+                                const cv = v === 0 ? 1 / Math.sqrt(2) : 1;
+                                sum += cu * cv * matrix[u][v] *
+                                       Math.cos(Math.PI * u * (2 * x + 1) / (2 * N)) *
+                                       Math.cos(Math.PI * v * (2 * y + 1) / (2 * M));
+                            }
+                        }
+                        result[x][y] = (2 / Math.sqrt(N * M)) * sum;
+                    }
+                }
+                return result;
+            }
+            
+            static quantumEmbedding(imageData, watermark, strength = 0.1) {
+                const width = imageData.width;
+                const height = imageData.height;
+                const data = new Uint8ClampedArray(imageData.data);
+                
+                // Process in 8x8 blocks
+                const blockSize = 8;
+                let watermarkIndex = 0;
+                
+                for (let i = 0; i < height - blockSize; i += blockSize) {
+                    for (let j = 0; j < width - blockSize; j += blockSize) {
+                        // Extract 8x8 block
+                        const block = [];
+                        for (let y = 0; y < blockSize; y++) {
+                            block[y] = [];
+                            for (let x = 0; x < blockSize; x++) {
+                                const index = ((i + y) * width + (j + x)) * 4;
+                                block[y][x] = (data[index] + data[index + 1] + data[index + 2]) / 3;
+                            }
+                        }
+                        
+                        // Apply DCT
+                        const dctBlock = this.dct2D(block);
+                        
+                        // Embed watermark in mid-frequency coefficients
+                        if (watermarkIndex < watermark.length) {
+                            const positions = [[2, 1], [1, 2], [3, 0], [0, 3]];
+                            for (let pos of positions) {
+                                if (watermarkIndex < watermark.length) {
+                                    dctBlock[pos[0]][pos[1]] += watermark[watermarkIndex] * strength * 100;
+                                    watermarkIndex++;
+                                }
+                            }
+                        }
+                        
+                        // Apply inverse DCT
+                        const reconstructedBlock = this.idct2D(dctBlock);
+                        
+                        // Put block back
+                        for (let y = 0; y < blockSize; y++) {
+                            for (let x = 0; x < blockSize; x++) {
+                                const index = ((i + y) * width + (j + x)) * 4;
+                                const value = Math.max(0, Math.min(255, reconstructedBlock[y][x]));
+                                data[index] = value;
+                                data[index + 1] = value;
+                                data[index + 2] = value;
+                            }
+                        }
+                    }
+                }
+                
+                return new ImageData(data, width, height);
+            }
+        }
+
+        // AI Detection Simulator
+        class AIDetection {
+            static async detectManipulation(imageData, modelType) {
+                // Simulate processing time
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                // Extract features from image
+                const features = this.extractFeatures(imageData);
+                
+                // Simulate different model behaviors
+                let confidence = 0;
+                let isManipulated = false;
+                
+                switch (modelType) {
+                    case 'cnn':
+                        confidence = Math.random() * 0.3 + 0.1; // 10-40%
+                        break;
+                    case 'resnet':
+                        confidence = Math.random() * 0.4 + 0.3; // 30-70%
+                        break;
+                    case 'efficientnet':
+                        confidence = Math.random() * 0.3 + 0.5; // 50-80%
+                        break;
+                }
+                
+                isManipulated = confidence > 0.5;
+                
+                return {
+                    isManipulated,
+                    confidence: confidence * 100,
+                    features,
+                    modelType
+                };
+            }
+            
+            static extractFeatures(imageData) {
+                const data = imageData.data;
+                let totalVariation = 0;
+                let edgeEnergy = 0;
+                let colorVariance = 0;
+                
+                // Calculate image statistics
+                for (let i = 0; i < data.length; i += 4) {
+                    const r = data[i];
+                    const g = data[i + 1];
+                    const b = data[i + 2];
+                    
+                    // Simple edge detection
+                    if (i + imageData.width * 4 < data.length) {
+                        const nextR = data[i + imageData.width * 4];
+                        const nextG = data[i + imageData.width * 4 + 1];
+                        const nextB = data[i + imageData.width * 4 + 2];
+                        
+                        edgeEnergy += Math.abs(r - nextR) + Math.abs(g - nextG) + Math.abs(b - nextB);
+                    }
+                    
+                    totalVariation += Math.abs(r - 128) + Math.abs(g - 128) + Math.abs(b - 128);
+                }
+                
+                return {
+                    totalVariation: totalVariation / (data.length / 4),
+                    edgeEnergy: edgeEnergy / (data.length / 4),
+                    colorVariance: colorVariance
+                };
+            }
+        }
+
+        // Main Application Logic
+        document.addEventListener('DOMContentLoaded', function() {
+            // Global variables
+            let currentWatermarkFile = null;
+            let currentDetectionFile = null;
+            let processingStartTime = null;
+
+            // Mobile Menu Toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+
+            // Strength slider update
+            const strengthSlider = document.getElementById('watermark-strength');
+            const strengthValue = document.getElementById('strength-value');
+            strengthSlider.addEventListener('input', function() {
+                strengthValue.textContent = this.value;
+            });
+
+            // Watermarking Section
+            const watermarkInput = document.getElementById('watermark-input');
+            const watermarkBrowse = document.getElementById('watermark-browse');
+            const watermarkDropzone = document.getElementById('watermark-dropzone');
+            const watermarkPreview = document.getElementById('watermark-preview');
+            const watermarkImagePreview = document.getElementById('watermark-image-preview');
+            const watermarkRemove = document.getElementById('watermark-remove');
+            const watermarkGenerate = document.getElementById('watermark-generate');
+
+            // Drag and drop for watermarking
+            watermarkDropzone.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.classList.add('border-purple-400');
+            });
+
+            watermarkDropzone.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                this.classList.remove('border-purple-400');
+            });
+
+            watermarkDropzone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('border-purple-400');
+                const files = e.dataTransfer.files;
+                if (files.length > 0 && files[0].type.startsWith('image/')) {
+                    handleWatermarkFile(files[0]);
+                }
+            });
+
+            watermarkBrowse.addEventListener('click', () => watermarkInput.click());
+            
+            watermarkInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    handleWatermarkFile(file);
+                }
+            });
+
+            function handleWatermarkFile(file) {
+                currentWatermarkFile = file;
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    watermarkImagePreview.src = event.target.result;
+                    watermarkPreview.classList.remove('hidden');
+                    watermarkGenerate.disabled = false;
+                };
+                reader.readAsDataURL(file);
+            }
+
+            watermarkRemove.addEventListener('click', function() {
+                watermarkPreview.classList.add('hidden');
+                watermarkInput.value = '';
+                watermarkGenerate.disabled = true;
+                currentWatermarkFile = null;
+            });
+
+            watermarkGenerate.addEventListener('click', async function() {
+                if (!currentWatermarkFile) return;
+                
+                processingStartTime = Date.now();
+                
+                // Show processing state
+                this.classList.add('processing');
+                this.innerHTML = '<div class="spinner"></div>Memproses...';
+                
+                try {
+                    const strength = parseInt(document.getElementById('watermark-strength').value) / 10;
+                    const method = document.getElementById('watermark-method').value;
+                    
+                    // Process image
+                    const canvas = document.getElementById('processing-canvas');
+                    const ctx = canvas.getContext('2d');
+                    const img = new Image();
+                    
+                    img.onload = async function() {
+                        canvas.width = Math.min(img.width, 800);
+                        canvas.height = Math.min(img.height, 600);
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        
+                        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                        let watermarkedData;
+                        
+                        // Generate watermark
+                        const watermarkSize = method === 'quantum' ? 256 : Math.min(1000, imageData.width * imageData.height / 16);
+                        const watermark = generateBinaryWatermark(watermarkSize);
+                        
+                        // Apply selected watermarking method
+                        if (method === 'svd') {
+                            watermarkedData = SVDWatermarking.embedWatermark(imageData, watermark, strength);
+                        } else if (method === 'quantum') {
+                            watermarkedData = QuantumWatermarking.quantumEmbedding(imageData, watermark, strength);
+                        } else {
+                            // Hybrid approach
+                            const svdWatermark = generateBinaryWatermark(Math.min(500, imageData.width * imageData.height / 32));
+                            const quantumWatermark = generateBinaryWatermark(128);
+                            const svdData = SVDWatermarking.embedWatermark(imageData, svdWatermark, strength/2);
+                            watermarkedData = QuantumWatermarking.quantumEmbedding(svdData, quantumWatermark, strength/2);
+                        }
+                        
+                        // Display results
+                        ctx.putImageData(watermarkedData, 0, 0);
+                        const watermarkedUrl = canvas.toDataURL();
+                        
+                        // Create difference visualization
+                        const diffCanvas = document.createElement('canvas');
+                        diffCanvas.width = canvas.width;
+                        diffCanvas.height = canvas.height;
+                        const diffCtx = diffCanvas.getContext('2d');
+                        const originalData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                        
+                        // Calculate difference
+                        const diffData = new ImageData(canvas.width, canvas.height);
+                        for (let i = 0; i < originalData.data.length; i += 4) {
+                            const diff = Math.abs(originalData.data[i] - watermarkedData.data[i]);
+                            diffData.data[i] = diff * 5; // Amplify difference
+                            diffData.data[i + 1] = diff * 5;
+                            diffData.data[i + 2] = diff * 5;
+                            diffData.data[i + 3] = 255;
+                        }
+                        
+                        diffCtx.putImageData(diffData, 0, 0);
+                        const diffUrl = diffCanvas.toDataURL();
+                        
+                        // Update display
+                        document.getElementById('result-original').src = watermarkImagePreview.src;
+                        document.getElementById('result-watermarked').src = watermarkedUrl;
+                        document.getElementById('result-visualization').src = diffUrl;
+                        
+                        // Update metrics with animation
+                        setTimeout(() => {
+                            updateMetrics(strength, method);
+                        }, 500);
+                        
+                        // Show results
+                        document.getElementById('no-results').classList.add('hidden');
+                        document.getElementById('result-container').classList.remove('hidden');
+                        
+                        // Scroll to results
+                        document.getElementById('result-container').scrollIntoView({ 
+                            behavior: 'smooth' 
+                        });
+                    };
+                    
+                    img.src = URL.createObjectURL(currentWatermarkFile);
+                    
+                } catch (error) {
+                    console.error('Error processing watermark:', error);
+                    alert('Terjadi kesalahan saat memproses gambar. Silakan coba lagi.');
+                } finally {
+                    // Reset button
+                    watermarkGenerate.classList.remove('processing');
+                    watermarkGenerate.innerHTML = '<i class="fas fa-magic mr-2"></i>Generate Watermark';
+                }
+            });
+
+            // Detection Section
+            const detectionInput = document.getElementById('detection-input');
+            const detectionBrowse = document.getElementById('detection-browse');
+            const detectionDropzone = document.getElementById('detection-dropzone');
+            const detectionPreview = document.getElementById('detection-preview');
+            const detectionImagePreview = document.getElementById('detection-image-preview');
+            const detectionRemove = document.getElementById('detection-remove');
+            const detectionAnalyze = document.getElementById('detection-analyze');
+
+            // Drag and drop for detection
+            detectionDropzone.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.classList.add('border-blue-400');
+            });
+
+            detectionDropzone.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                this.classList.remove('border-blue-400');
+            });
+
+            detectionDropzone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('border-blue-400');
+                const files = e.dataTransfer.files;
+                if (files.length > 0 && files[0].type.startsWith('image/')) {
+                    handleDetectionFile(files[0]);
+                }
+            });
+
+            detectionBrowse.addEventListener('click', () => detectionInput.click());
+            
+            detectionInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    handleDetectionFile(file);
+                }
+            });
+
+            function handleDetectionFile(file) {
+                currentDetectionFile = file;
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    detectionImagePreview.src = event.target.result;
+                    detectionPreview.classList.remove('hidden');
+                    detectionAnalyze.disabled = false;
+                };
+                reader.readAsDataURL(file);
+            }
+
+            detectionRemove.addEventListener('click', function() {
+                detectionPreview.classList.add('hidden');
+                detectionInput.value = '';
+                detectionAnalyze.disabled = true;
+                currentDetectionFile = null;
+            });
+
+            detectionAnalyze.addEventListener('click', async function() {
+                if (!currentDetectionFile) return;
+                
+                processingStartTime = Date.now();
+                
+                // Show processing state
+                this.classList.add('processing');
+                this.innerHTML = '<div class="spinner"></div>Menganalisis...';
+                
+                try {
+                    const modelType = document.getElementById('detection-model').value;
+                    
+                    // Process image
+                    const canvas = document.getElementById('processing-canvas');
+                    const ctx = canvas.getContext('2d');
+                    const img = new Image();
+                    
+                    img.onload = async function() {
+                        canvas.width = Math.min(img.width, 800);
+                        canvas.height = Math.min(img.height, 600);
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        
+                        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                        
+                        // Run AI detection
+                        const result = await AIDetection.detectManipulation(imageData, modelType);
+                        
+                        // Update detection results
+                        updateDetectionResults(result);
+                        
+                        // Show original image in results
+                        document.getElementById('result-original').src = detectionImagePreview.src;
+                        document.getElementById('result-watermarked').src = '';
+                        document.getElementById('result-visualization').src = '';
+                        
+                        // Show results
+                        document.getElementById('no-results').classList.add('hidden');
+                        document.getElementById('result-container').classList.remove('hidden');
+                        
+                        // Scroll to results
+                        document.getElementById('result-container').scrollIntoView({ 
+                            behavior: 'smooth' 
+                        });
+                    };
+                    
+                    img.src = URL.createObjectURL(currentDetectionFile);
+                    
+                } catch (error) {
+                    console.error('Error in AI detection:', error);
+                    alert('Terjadi kesalahan saat menganalisis gambar. Silakan coba lagi.');
+                } finally {
+                    // Reset button
+                    detectionAnalyze.classList.remove('processing');
+                    detectionAnalyze.innerHTML = '<i class="fas fa-microscope mr-2"></i>Analisis Forensik';
+                }
+            });
+
+            // Helper functions
+            function generateBinaryWatermark(length) {
+                const watermark = new Array(length);
+                for (let i = 0; i < length; i++) {
+                    watermark[i] = Math.random() > 0.5 ? 1 : -1;
+                }
+                return watermark;
+            }
+
+            function updateMetrics(strength, method) {
+                const baseIntegrity = 85 + Math.random() * 10;
+                const strengthScore = Math.min(95, strength * 100 + Math.random() * 10);
+                const resistanceScore = method === 'hybrid' ? 90 + Math.random() * 8 : 
+                                       method === 'quantum' ? 85 + Math.random() * 10 : 
+                                       75 + Math.random() * 15;
+                
+                // Animate progress bars
+                setTimeout(() => {
+                    document.getElementById('integrity-score').textContent = Math.round(baseIntegrity) + '%';
+                    document.getElementById('integrity-bar').style.width = baseIntegrity + '%';
+                }, 200);
+                
+                setTimeout(() => {
+                    document.getElementById('strength-score').textContent = Math.round(strengthScore) + '%';
+                    document.getElementById('strength-bar').style.width = strengthScore + '%';
+                }, 400);
+                
+                setTimeout(() => {
+                    document.getElementById('resistance-score').textContent = Math.round(resistanceScore) + '%';
+                    document.getElementById('resistance-bar').style.width = resistanceScore + '%';
+                }, 600);
+
+                // Update detection status for watermarking
+                document.getElementById('detection-watermark').innerHTML = 
+                    '<i class="fas fa-check-circle text-green-400 text-xl mr-2"></i><span>Watermark Berhasil Disisipi</span>';
+                document.getElementById('detection-manipulation').innerHTML = 
+                    '<i class="fas fa-shield-alt text-blue-400 text-xl mr-2"></i><span>Gambar Dilindungi</span>';
+                document.getElementById('detection-integrity').innerHTML = 
+                    '<i class="fas fa-check-circle text-green-400 text-xl mr-2"></i><span>Integritas Terjaga</span>';
+                
+                document.getElementById('confidence-score').textContent = Math.round(baseIntegrity) + '%';
+                document.getElementById('model-used').textContent = method.toUpperCase();
+                document.getElementById('processing-time').textContent = 
+                    ((Date.now() - processingStartTime) / 1000).toFixed(2) + 's';
+            }
+
+            function updateDetectionResults(result) {
+                const processingTime = ((Date.now() - processingStartTime) / 1000).toFixed(2);
+                
+                // Update detection status
+                if (result.isManipulated) {
+                    document.getElementById('detection-watermark').innerHTML = 
+                        '<i class="fas fa-exclamation-triangle text-yellow-400 text-xl mr-2"></i><span>Watermark Tidak Terdeteksi</span>';
+                    document.getElementById('detection-manipulation').innerHTML = 
+                        '<i class="fas fa-times-circle text-red-400 text-xl mr-2"></i><span>MANIPULASI AI TERDETEKSI</span>';
+                    document.getElementById('detection-integrity').innerHTML = 
+                        '<i class="fas fa-times-circle text-red-400 text-xl mr-2"></i><span>Integritas Bermasalah</span>';
+                } else {
+                    document.getElementById('detection-watermark').innerHTML = 
+                        '<i class="fas fa-question-circle text-gray-400 text-xl mr-2"></i><span>Watermark: Tidak Jelas</span>';
+                    document.getElementById('detection-manipulation').innerHTML = 
+                        '<i class="fas fa-check-circle text-green-400 text-xl mr-2"></i><span>Tidak Ada Manipulasi Terdeteksi</span>';
+                    document.getElementById('detection-integrity').innerHTML = 
+                        '<i class="fas fa-check-circle text-green-400 text-xl mr-2"></i><span>Integritas Terjaga</span>';
+                }
+                
+                // Update metrics based on detection
+                const integrityScore = result.isManipulated ? 30 + Math.random() * 20 : 80 + Math.random() * 15;
+                const strengthScore = result.isManipulated ? 20 + Math.random() * 30 : 70 + Math.random() * 20;
+                const resistanceScore = result.isManipulated ? 25 + Math.random() * 25 : 75 + Math.random() * 20;
+                
+                setTimeout(() => {
+                    document.getElementById('integrity-score').textContent = Math.round(integrityScore) + '%';
+                    document.getElementById('integrity-bar').style.width = integrityScore + '%';
+                    document.getElementById('integrity-bar').className = `${integrityScore > 60 ? 'bg-green-400' : 'bg-red-400'} h-2 rounded-full transition-all duration-1000`;
+                }, 200);
+                
+                setTimeout(() => {
+                    document.getElementById('strength-score').textContent = Math.round(strengthScore) + '%';
+                    document.getElementById('strength-bar').style.width = strengthScore + '%';
+                }, 400);
+                
+                setTimeout(() => {
+                    document.getElementById('resistance-score').textContent = Math.round(resistanceScore) + '%';
+                    document.getElementById('resistance-bar').style.width = resistanceScore + '%';
+                }, 600);
+                
+                document.getElementById('confidence-score').textContent = result.confidence.toFixed(2) + '%';
+                document.getElementById('model-used').textContent = result.modelType.toUpperCase();
+                document.getElementById('processing-time').textContent = processingTime + 's';
+            }
+        });
+        function downloadAnalysisAsImage() {
+        const element = document.getElementById("analysis-result");
+
+        html2canvas(element).then(canvas => {
+            const link = document.createElement("a");
+            link.download = "hasil-analisis.png";
+            link.href = canvas.toDataURL("image/png");
+            link.click();
+        });
+    }
+
+    // Fungsi untuk mendownload hanya gambar hasil watermark sebagai PNG
+    function downloadWatermarkedImageOnly() {
+        const imageElement = document.getElementById("result-watermarked");
+
+        // Jika ingin hanya gambarnya tanpa elemen lainnya
+        const imageSrc = imageElement.src;
+
+        const link = document.createElement("a");
+        link.download = "gambar-watermarked.png";
+        link.href = imageSrc;
+        link.click();
+    }
+
+window.downloadAnalysisAsImage = downloadAnalysisAsImage;
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tentang - WaterSense AI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <nav class="gradient-bg p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-fingerprint text-2xl"></i>
+                <span class="text-xl font-bold">WaterSense AI</span>
+            </div>
+            <div class="hidden md:flex space-x-4">
+                <a href="index.html" class="hover:text-purple-200 transition">Beranda</a>
+                <a href="detection.html" class="hover:text-purple-200 transition">Watermark Detection</a>
+                <a href="tentang.html" class="hover:text-purple-200 transition">Tentang</a>
+                <a href="dokumentasi.html" class="hover:text-purple-200 transition">Dokumentasi</a>
+            </div>
+            <button class="md:hidden" id="mobile-menu-button">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden container mx-auto mt-2 pb-2">
+            <a href="index.html" class="block py-2 hover:text-purple-200 transition">Beranda</a>
+            <a href="tentang.html" class="block py-2 hover:text-purple-200 transition">Tentang</a>
+            <a href="dokumentasi.html" class="block py-2 hover:text-purple-200 transition">Dokumentasi</a>
+        </div>
+    </nav>
+
+    <header class="py-12 gradient-bg">
+        <div class="container mx-auto text-center px-4">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">Tentang WaterSense AI</h1>
+            <p class="text-xl mb-6">Memahami teknologi kami dan bagaimana kami melindungi konten digital Anda</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto py-12 px-4">
+        <!-- About Section -->
+        <section class="mb-16">
+            <div class="grid md:grid-cols-2 gap-10 items-center">
+                <div>
+                    <h2 class="text-3xl font-bold mb-6">Visi Kami</h2>
+                    <p class="mb-4 text-lg">WaterSense AI dikembangkan sebagai respons terhadap ancaman yang semakin meningkat dari manipulasi gambar berbasis AI. Di era di mana teknologi seperti deepfake dan generator gambar AI semakin canggih, perlindungan integritas konten digital menjadi sangat penting.</p>
+                    <p class="mb-4 text-lg">Visi kami adalah menciptakan ekosistem digital di mana setiap kreator dapat memiliki kepastian bahwa konten mereka terlindungi dan dapat diverifikasi keasliannya.</p>
+                    <div class="bg-purple-900 bg-opacity-30 border-l-4 border-purple-500 p-4 rounded">
+                        <p class="italic">"Di dunia di mana manipulasi digital semakin sulit dibedakan dari yang asli, teknologi watermarking menjadi garis pertahanan pertama untuk integritas media."</p>
+                    </div>
+                </div>
+                <div class="flex justify-center">
+                    <div class="quantum-animation rounded-full gradient-bg p-1">
+                        <div class="bg-gray-900 rounded-full p-4">
+                            <img src="/static/images/WATERSENSE.png" alt="AI Protection Concept" class="rounded-full">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- How It Works -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-center">Cara Kerja WaterSense AI</h2>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="feature-card bg-gray-800 p-6 rounded-xl">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-purple-900 rounded-full w-12 h-12 flex items-center justify-center mr-4">
+                            <i class="fas fa-fingerprint text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">SVD Watermarking</h3>
+                    </div>
+                    <p class="mb-4">SVD (Singular Value Decomposition) adalah teknik matematika yang memecah gambar menjadi komponen frekuensi. WaterSense menyisipkan watermark pada komponen frekuensi rendah yang tahan terhadap kompresi dan manipulasi.</p>
+                    <ol class="list-decimal pl-5 space-y-2">
+                        <li>Gambar dikonversi ke domain frekuensi</li>
+                        <li>Watermark disisipkan pada nilai singular</li>
+                        <li>Transformasi balik untuk mendapatkan gambar terwatermark</li>
+                    </ol>
+                </div>
+                
+                <div class="feature-card bg-gray-800 p-6 rounded-xl">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-blue-900 rounded-full w-12 h-12 flex items-center justify-center mr-4">
+                            <i class="fas fa-brain text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">Transfer Learning</h3>
+                    </div>
+                    <p class="mb-4">Model AI kami dilatih menggunakan transfer learning untuk mendeteksi berbagai jenis manipulasi gambar berbasis AI, termasuk GAN, diffusion models, dan manipulasi tradisional.</p>
+                    <ol class="list-decimal pl-5 space-y-2">
+                        <li>Pre-trained pada dataset besar gambar asli dan manipulasi</li>
+                        <li>Fine-tuning untuk jenis manipulasi baru</li>
+                        <li>Analisis multi-layer untuk deteksi akurat</li>
+                    </ol>
+                </div>
+                
+                <div class="feature-card bg-gray-800 p-6 rounded-xl">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-indigo-900 rounded-full w-12 h-12 flex items-center justify-center mr-4">
+                            <i class="fas fa-atom text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">Quantum-inspired</h3>
+                    </div>
+                    <p class="mb-4">Teknik watermarking kami menerapkan prinsip-prinsip kuantum seperti superposisi untuk menyisipkan watermark pada beberapa domain sekaligus.</p>
+                    <ol class="list-decimal pl-5 space-y-2">
+                        <li>Penyisipan redundan di berbagai domain transformasi</li>
+                        <li>Rekonstruksi watermark bahkan setelah manipulasi berat</li>
+                        <li>Verifikasi keamanan berbasis kriptografi</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Use Cases -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-center">Kasus Penggunaan</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-gray-800 rounded-xl overflow-hidden">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold mb-3 flex items-center">
+                            <i class="fas fa-camera text-purple-400 mr-3"></i>
+                            Fotografer Profesional
+                        </h3>
+                        <p class="mb-4">Fotografer dapat melindungi karya mereka sebelum diunggah ke platform online, memastikan bahwa setiap salinan yang dimodifikasi tanpa izin dapat dideteksi.</p>
+                        <ul class="list-disc pl-5 space-y-1 text-gray-300">
+                            <li>Proteksi hak cipta yang kuat</li>
+                            <li>Deteksi penggunaan tidak sah</li>
+                            <li>Bukti kepemilikan yang dapat diverifikasi</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-800 rounded-xl overflow-hidden">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold mb-3 flex items-center">
+                            <i class="fas fa-newspaper text-blue-400 mr-3"></i>
+                            Media & Jurnalisme
+                        </h3>
+                        <p class="mb-4">Lembaga berita dapat menggunakan WaterSense AI untuk memastikan integritas gambar berita mereka dan memverifikasi keaslian konten yang diterima.</p>
+                        <ul class="list-disc pl-5 space-y-1 text-gray-300">
+                            <li>Verifikasi sumber gambar</li>
+                            <li>Deteksi deepfake dan manipulasi</li>
+                            <li>Pertahankan integritas jurnalistik</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-800 rounded-xl overflow-hidden">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold mb-3 flex items-center">
+                            <i class="fas fa-university text-green-400 mr-3"></i>
+                            Institusi Pendidikan
+                        </h3>
+                        <p class="mb-4">Universitas dan institusi pendidikan dapat mengamankan materi pembelajaran mereka dan memverifikasi keaslian karya siswa untuk mencegah plagiarisme visual.</p>
+                        <ul class="list-disc pl-5 space-y-1 text-gray-300">
+                            <li>Proteksi materi pembelajaran digital</li>
+                            <li>Verifikasi orisinalitas karya visual siswa</li>
+                            <li>Membangun literasi media digital</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-800 rounded-xl overflow-hidden">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold mb-3 flex items-center">
+                            <i class="fas fa-building text-yellow-400 mr-3"></i>
+                            Bisnis & Perusahaan
+                        </h3>
+                        <p class="mb-4">Perusahaan dapat melindungi aset visual mereka seperti katalog produk, materi pemasaran, dan dokumentasi internal dari penyalahgunaan.</p>
+                        <ul class="list-disc pl-5 space-y-1 text-gray-300">
+                            <li>Proteksi brand dan logo</li>
+                            <li>Keamanan dokumen internal</li>
+                            <li>Pencegahan pemalsuan visual</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section> 
+        <!-- Teknologi Kami -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-center">Keunggulan Teknologi Kami</h2>
+            
+            <div class="grid md:grid-cols-2 gap-10 items-center">
+                <div>
+                    <div class="mb-8">
+                        <h3 class="text-2xl font-bold mb-4 flex items-center">
+                            <i class="fas fa-shield-alt text-purple-400 mr-3"></i>
+                            Ketahanan Tinggi
+                        </h3>
+                        <p class="text-lg">Watermark kami dirancang untuk bertahan terhadap berbagai manipulasi gambar termasuk kompresi, cropping, rotasi, dan transformasi warna.</p>
+                    </div>
+                    
+                    <div class="mb-8">
+                        <h3 class="text-2xl font-bold mb-4 flex items-center">
+                            <i class="fas fa-low-vision text-blue-400 mr-3"></i>
+                            Tidak Terlihat
+                        </h3>
+                        <p class="text-lg">Teknologi watermarking kami tidak menimbulkan distorsi visual yang terlihat, menjaga kualitas estetika gambar asli.</p>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-2xl font-bold mb-4 flex items-center">
+                            <i class="fas fa-tachometer-alt text-green-400 mr-3"></i>
+                            Kecepatan Tinggi
+                        </h3>
+                        <p class="text-lg">Algoritma kami dioptimalkan untuk melakukan watermarking dan verifikasi hampir secara real-time, bahkan untuk gambar resolusi tinggi.</p>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-800 p-6 rounded-xl">
+                    <h3 class="text-2xl font-bold mb-6 text-center">Perbandingan Metode</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="border-b border-gray-700">
+                                    <th class="px-4 py-2 text-left">Fitur</th>
+                                    <th class="px-4 py-2 text-center">WaterSense AI</th>
+                                    <th class="px-4 py-2 text-center">Metode Tradisional</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b border-gray-700">
+                                    <td class="px-4 py-3">Ketahanan terhadap kompresi</td>
+                                    <td class="px-4 py-3 text-center"><i class="fas fa-check text-green-400"></i></td>
+                                    <td class="px-4 py-3 text-center"><i class="fas fa-times text-red-400"></i></td>
+                                </tr>
+                                <tr class="border-b border-gray-700">
+                                    <td class="px-4 py-3">Ketahanan terhadap cropping</td>
+                                    <td class="px-4 py-3 text-center"><i class="fas fa-check text-green-400"></i></td>
+                                    <td class="px-4 py-3 text-center"><i class="fas fa-times text-red-400"></i></td>
+                                </tr>
+                                <tr class="border-b border-gray-700">
+                                    <td class="px-4 py-3">Deteksi manipulasi AI</td>
+                                    <td class="px-4 py-3 text-center"><i class="fas fa-check text-green-400"></i></td>
+                                    <td class="px-4 py-3 text-center"><i class="fas fa-times text-red-400"></i></td>
+                                </tr>
+                                <tr class="border-b border-gray-700">
+                                    <td class="px-4 py-3">Tidak terlihat</td>
+                                    <td class="px-4 py-3 text-center"><i class="fas fa-check text-green-400"></i></td>
+                                    <td class="px-4 py-3 text-center"><i class="fas fa-check text-green-400"></i></td>
+                                </tr>
+                                <tr class="border-b border-gray-700">
+                                    <td class="px-4 py-3">Kecepatan pemrosesan</td>
+                                    <td class="px-4 py-3 text-center">< 1 detik</td>
+                                    <td class="px-4 py-3 text-center">5-10 detik</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3">Verifikasi terdistribusi</td>
+                                    <td class="px-4 py-3 text-center"><i class="fas fa-check text-green-400"></i></td>
+                                    <td class="px-4 py-3 text-center"><i class="fas fa-times text-red-400"></i></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- FAQ -->
+        <section>
+            <h2 class="text-3xl font-bold mb-8 text-center">Pertanyaan Umum</h2>
+            
+            <div class="space-y-6">
+                <div class="bg-gray-800 p-6 rounded-xl">
+                    <h3 class="text-xl font-bold mb-3">Apakah watermark dapat dihapus oleh pihak yang tidak berwenang?</h3>
+                    <p>Watermark WaterSense AI dirancang untuk tahan terhadap upaya penghapusan. Meskipun manipulasi berat mungkin dapat merusak sebagian watermark, sistem kami masih dapat mendeteksi tanda-tanda manipulasi dan memverifikasi bahwa gambar telah dimodifikasi.</p>
+                </div>
+                
+                <div class="bg-gray-800 p-6 rounded-xl">
+                    <h3 class="text-xl font-bold mb-3">Bagaimana WaterSense AI membedakan antara manipulasi yang sah dan tidak sah?</h3>
+                    <p>Sistem kami memungkinkan pemilik konten untuk mendaftarkan "identitas digital" yang diverifikasi. Hanya pemilik yang dapat menghasilkan versi modifikasi yang diakui sebagai sah oleh sistem verifikasi kami.</p>
+                </div>
+                
+                <div class="bg-gray-800 p-6 rounded-xl">
+                    <h3 class="text-xl font-bold mb-3">Apakah watermark mempengaruhi kualitas gambar?</h3>
+                    <p>Tidak. Watermark kami dirancang untuk menjadi sepenuhnya tidak terlihat bagi mata manusia. Kami menggunakan teknik penyisipan pada domain frekuensi yang tidak mempengaruhi kualitas visual gambar.</p>
+                </div>
+                
+                <div class="bg-gray-800 p-6 rounded-xl">
+                    <h3 class="text-xl font-bold mb-3">Apakah sistem ini dapat mendeteksi deepfake video?</h3>
+                    <p>Saat ini, WaterSense AI berfokus pada perlindungan dan verifikasi gambar statis. Kami sedang mengembangkan teknologi serupa untuk konten video yang akan diluncurkan pada tahun 2026.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer class="gradient-bg py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class="fas fa-fingerprint text-2xl"></i>
+                        <span class="text-xl font-bold">WaterSense AI</span>
+                    </div>
+                    <p class="text-gray-300 mb-4">Melindungi integritas konten digital Anda dengan teknologi watermarking berbasis AI generasi berikutnya.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="hover:text-purple-300 transition"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="hover:text-purple-300 transition"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="hover:text-purple-300 transition"><i class="fab fa-github"></i></a>
+                        <a href="#" class="hover:text-purple-300 transition"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Navigasi</h3>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-300 hover:text-white transition">Beranda</a></li>
+                        <li><a href="tentang.html" class="text-gray-300 hover:text-white transition">Tentang</a></li>
+                        <li><a href="dokumentasi.html" class="text-gray-300 hover:text-white transition">Dokumentasi</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition">Blog</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition">Kontak</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Layanan</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white transition">Watermarking API</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition">Verifikasi Gambar</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition">Deteksi Manipulasi</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition">Enterprise Solutions</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition">Harga</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Berlangganan</h3>
+                    <p class="text-gray-300 mb-4">Dapatkan update terbaru tentang teknologi watermarking dan perlindungan konten.</p>
+                    <form>
+                        <div class="flex flex-col space-y-3">
+                            <input type="email" placeholder="Email Anda" class="bg-gray-800 text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-purple-500">
+                            <button class="bg-purple-700 hover:bg-purple-600 transition text-white px-4 py-2 rounded">Berlangganan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-12 pt-8 text-center">
+                <p class="text-gray-400">&copy; 2025 WaterSense AI. Seluruh hak cipta dilindungi.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Tambahkan animasi untuk elemen quantum jika diperlukan
+        document.addEventListener('DOMContentLoaded', function() {
+            const quantumElements = document.querySelectorAll('.quantum-animation');
+            
+            quantumElements.forEach(element => {
+                element.classList.add('animate-pulse');
+            });
+        });
+    </script>
+</body>
+</html>

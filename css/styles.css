@@ -1,0 +1,220 @@
+/* Custom Styles for WaterSense AI */
+
+.gradient-bg {
+    background: linear-gradient(135deg, #6A0DAD 0%, #2F1A67 100%);
+}
+
+.water-ripple {
+    position: relative;
+    overflow: hidden;
+}
+
+.water-ripple::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.2);
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%);
+    transform-origin: 50% 50%;
+}
+
+.water-ripple:hover::after {
+    animation: ripple 1s ease-out;
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(20, 20);
+        opacity: 0;
+    }
+}
+
+.quantum-animation {
+    animation: pulse 4s infinite;
+}
+
+@keyframes pulse {
+    0% { 
+        box-shadow: 0 0 0 0 rgba(103, 58, 183, 0.7); 
+    }
+    70% { 
+        box-shadow: 0 0 0 20px rgba(103, 58, 183, 0); 
+    }
+    100% { 
+        box-shadow: 0 0 0 0 rgba(103, 58, 183, 0); 
+    }
+}
+
+.result-box {
+    background: rgba(31, 41, 55, 0.8);
+    border: 1px solid #4b5563;
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+}
+
+.processing {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.spinner {
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #3498db;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 2s linear infinite;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+@keyframes spin {
+    0% { 
+        transform: rotate(0deg); 
+    }
+    100% { 
+        transform: rotate(360deg); 
+    }
+}
+
+/* Custom Form Styles */
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 8px;
+    background: #374151;
+    border-radius: 4px;
+    outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #6A0DAD;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: #6A0DAD;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+}
+
+/* Dropzone Styles */
+.dropzone-active {
+    border-color: #8B5CF6 !important;
+    background-color: rgba(139, 92, 246, 0.1);
+}
+
+/* Progress Bar Animations */
+.progress-bar {
+    transition: width 1s ease-in-out;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .quantum-animation .rounded-full {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .quantum-animation img {
+        width: 200px;
+    }
+}
+
+/* Loading States */
+.loading {
+    position: relative;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #6A0DAD;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Hover Effects */
+.hover-scale:hover {
+    transform: scale(1.05);
+    transition: transform 0.2s ease-in-out;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1f2937;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #6A0DAD;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #8B5CF6;
+}
+
+/* Fade In Animation */
+.fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Status Icons */
+.status-icon {
+    transition: all 0.3s ease;
+}
+
+.status-success {
+    color: #10B981;
+}
+
+.status-warning {
+    color: #F59E0B;
+}
+
+.status-error {
+    color: #EF4444;
+}
+
+.status-info {
+    color: #3B82F6;
+}
