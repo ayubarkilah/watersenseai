@@ -1,0 +1,382 @@
+.gradient-bg {
+    background: linear-gradient(135deg, #6A0DAD, #2F1A67);
+    background-blend-mode: overlay;
+        background-blend-mode: overlay;
+    
+}
+
+.quantum-animation {
+    animation: quantumPulse 3s infinite ease-in-out;
+}
+
+@keyframes quantumPulse {
+    0% { transform: scale(1); opacity: 0.7; }
+    50% { transform: scale(1.03); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.7; }
+}
+
+.result-box {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+}
+
+.water-ripple {
+    position: relative;
+    overflow: hidden;
+}
+
+.water-ripple:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle, transparent 30%, rgba(79, 70, 229, 0.2) 70%);
+    transform: scale(0);
+    opacity: 0;
+    transition: all 0.5s;
+}
+
+.water-ripple:hover:after {
+    transform: scale(2);
+    opacity: 1;
+}
+
+/* File upload styling */
+.dropzone-active {
+    border-color: #A855F7 !important;
+    background-color: rgba(168, 85, 247, 0.1);
+}
+
+.dropzone-active.blue-zone {
+    border-color: #3B82F6 !important;
+    background-color: rgba(59, 130, 246, 0.1);
+}
+
+/* Loading animation */
+.loading {
+    position: relative;
+}
+
+.loading:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0.5rem;
+}
+
+.loading:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30px;
+    height: 30px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s linear infinite;
+    z-index: 10;
+}
+
+@keyframes spin {
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+/* Error/Success messaging */
+.message {
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.message.error {
+    background-color: rgba(239, 68, 68, 0.2);
+    border-left: 4px solid #EF4444;
+}
+
+.message.success {
+    background-color: rgba(34, 197, 94, 0.2);
+    border-left: 4px solid #22C55E;
+}
+
+/* Responsiveness adjustments */
+@media (max-width: 640px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
+/* WaterSense AI - Main Stylesheet */
+
+/* Base Styles */
+body {
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #f1f1f1;
+}
+
+/* Gradient Background */
+.gradient-bg { 
+    background: linear-gradient(135deg, #6A0DAD, #2F1A67); 
+    background-blend-mode: overlay; 
+}
+
+/* Quantum Animation Effect */
+.quantum-animation { 
+    animation: quantumPulse 3s infinite ease-in-out; 
+}
+
+@keyframes quantumPulse { 
+    0% { transform: scale(1); opacity: 0.7; } 
+    50% { transform: scale(1.03); opacity: 1; } 
+    100% { transform: scale(1); opacity: 0.7; } 
+}
+
+/* Result Box Styling */
+.result-box { 
+    background: rgba(255, 255, 255, 0.1); 
+    backdrop-filter: blur(10px); 
+    border-radius: 10px; 
+}
+
+/* Water Ripple Effect */
+.water-ripple { 
+    position: relative; 
+    overflow: hidden; 
+}
+
+.water-ripple:after { 
+    content: ''; 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    right: 0; 
+    bottom: 0; 
+    background: radial-gradient(circle, transparent 30%, rgba(79, 70, 229, 0.2) 70%); 
+    transform: scale(0); 
+    opacity: 0; 
+    transition: all 0.5s; 
+}
+
+.water-ripple:hover:after { 
+    transform: scale(2); 
+    opacity: 1; 
+}
+
+/* File Upload Styling */
+.dropzone-active { 
+    border-color: #A855F7 !important; 
+    background-color: rgba(168, 85, 247, 0.1); 
+}
+
+.dropzone-active.blue-zone { 
+    border-color: #3B82F6 !important; 
+    background-color: rgba(59, 130, 246, 0.1); 
+}
+
+/* Loading Animation */
+.loading { 
+    position: relative; 
+}
+
+.loading:after { 
+    content: ""; 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    right: 0; 
+    bottom: 0; 
+    background: rgba(0,0,0,0.5); 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    border-radius: 0.5rem; 
+}
+
+.loading:before { 
+    content: ""; 
+    position: absolute; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    width: 30px; 
+    height: 30px; 
+    border: 3px solid rgba(255, 255, 255, 0.3); 
+    border-radius: 50%; 
+    border-top-color: #fff; 
+    animation: spin 1s linear infinite; 
+    z-index: 10; 
+}
+
+@keyframes spin { 
+    to { transform: translate(-50%, -50%) rotate(360deg); } 
+}
+
+/* Error/Success Messaging */
+.message { 
+    padding: 0.75rem; 
+    border-radius: 0.5rem; 
+    margin-bottom: 1rem; 
+}
+
+.message.error { 
+    background-color: rgba(239, 68, 68, 0.2); 
+    border-left: 4px solid #EF4444; 
+}
+
+.message.success { 
+    background-color: rgba(34, 197, 94, 0.2); 
+    border-left: 4px solid #22C55E; 
+}
+
+/* Input Styling */
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #A855F7;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #A855F7;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+}
+
+input[type="range"]:focus::-webkit-slider-thumb {
+    box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.4);
+}
+
+input[type="range"]#detection-sensitivity::-webkit-slider-thumb {
+    background: #3B82F6;
+}
+
+input[type="range"]#detection-sensitivity::-moz-range-thumb {
+    background: #3B82F6;
+}
+
+input[type="range"]#detection-sensitivity:focus::-webkit-slider-thumb {
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.4);
+}
+
+/* Select Styling */
+select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 16px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    outline: none;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+select:focus {
+    border-color: #A855F7;
+    box-shadow: 0 0 0 0.2rem rgba(168, 85, 247, 0.25);
+}
+
+select#detection-mode:focus {
+    border-color: #3B82F6;
+    box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
+}
+
+/* Button Transition Effects */
+button:not(:disabled) {
+    transition: all 0.2s ease;
+}
+
+button:not(:disabled):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+button:not(:disabled):active {
+    transform: translateY(0);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 640px) { 
+    .grid { 
+        grid-template-columns: 1fr; 
+    }
+    
+    h1 {
+        font-size: 1.8rem !important;
+    }
+    
+    h2 {
+        font-size: 1.5rem !important;
+    }
+    
+    .quantum-animation img {
+        width: 180px;
+        height: 180px;
+    }
+    
+    .py-16 {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+    
+    .py-12 {
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
+    }
+}
+
+/* SVD Visualization Effects */
+.svd-particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #A855F7;
+    opacity: 0.6;
+    animation: floatParticle 8s infinite ease-in-out;
+}
+
+@keyframes floatParticle {
+    0%, 100% {
+        transform: translate(0, 0);
+    }
+    25% {
+        transform: translate(10px, -10px);
+    }
+    50% {
+        transform: translate(15px, 5px);
+    }
+    75% {
+        transform: translate(-5px, 10px);
+    }
+}
